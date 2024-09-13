@@ -8,6 +8,73 @@ typedef struct Node {
     int height;
 } Node;
 
+// Prototipos das funções usadas
+struct Node* insertNode(struct Node *node, int data);
+struct Node* deleteNode(struct Node *root, int data);
+void printPreOrder(struct Node *root);
+void displayTree(struct Node *root);
+void menu();
+
+
+// Função principal
+int main() {
+    menu(); // Chama a função do menu interativo
+    return 0;
+}
+
+// Função para exibir o menu e lidar com as opções
+void menu() {
+    struct Node *root = NULL;
+    int option, value;
+
+    do {
+        printf("\nMenu:\n"
+               "1 - Inserir valor\n"
+               "2 - Excluir valor\n"
+               "3 - Exibir árvore (pré-ordem)\n"
+               "4 - Exibir árvore (formato gráfico)\n"
+               "5 - Sair\n"
+               "Escolha uma opção: ");
+        scanf("%d", &option);
+
+        switch (option) {
+            case 1:
+                printf("Digite o valor a ser inserido: ");
+                scanf("%d", &value);
+                root = insertNode(root, value);
+                printf("Valor inserido!\n");
+                break;
+
+            case 2:
+                printf("Digite o valor a ser excluído: ");
+                scanf("%d", &value);
+                root = deleteNode(root, value);
+                printf("Valor excluído (se existir)!\n");
+                break;
+
+            case 3:
+                printf("Árvore em pré-ordem: ");
+                printPreOrder(root);
+                printf("\n");
+                break;
+
+            case 4:
+                printf("Exibindo a árvore no formato gráfico:\n");
+                displayTree(root);
+                break;
+
+            case 5:
+                printf("Saindo...\n");
+                break;
+
+            default:
+                printf("Opção inválida! Tente novamente.\n");
+                break;
+        }
+    } while (option != 5);
+}
+
+
 // Retorna a altura do nó
 int height(struct Node *N) {
     if (N == NULL) {
@@ -27,7 +94,7 @@ struct Node *newNode(int data) {
     node->data = data;
     node->left = NULL;
     node->right = NULL;
-    node->height = 1; // New node is initially added at leaf
+    node->height = 1;
     return node;
 }
 
@@ -201,4 +268,34 @@ void printPreOrder(struct Node *root) {
     printPreOrder(root->left);
     printPreOrder(root->right);
   }
+}
+
+// Função auxiliar para exibir a árvore em um formato visual de árvore
+void printTree(struct Node *root, int space) {
+    // Define o espaço entre níveis
+    int count = 5;
+
+    // Caso base
+    if (root == NULL)
+        return;
+
+    // Aumenta a distância entre os níveis
+    space += count;
+
+    // Imprime a subárvore da direita primeiro
+    printTree(root->right, space);
+
+    // Imprime o nó atual após um espaço adequado
+    printf("\n");
+    for (int i = count; i < space; i++)
+        printf(" ");
+    printf("%d\n", root->data);
+
+    // Imprime a subárvore da esquerda
+    printTree(root->left, space);
+}
+
+// Função para exibir a árvore, chamando a função auxiliar
+void displayTree(struct Node *root) {
+    printTree(root, 0);
 }
