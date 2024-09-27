@@ -151,19 +151,33 @@ void inOrder(Node *root) {
     }
 }
 
-void menu(Node **root) {
+void printTree(Node *root, int space) {
+    int COUNT = 10;
+    
+    if (root == NULL)
+        return;
+
+    space += COUNT;
+
+    printTree(root->right, space);
+
+    printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    
+    if (root->color == RED)
+        printf("%d (RED)\n", root->data);
+    else
+        printf("%d (BLACK)\n", root->data);
+
+    printTree(root->left, space);
+}
+
+void menu(Node **root){
     int option = 0;
     do {
 
-        printf("----------MENU---------\n
-               1 - Inserir Valor\n
-               2 - Imprimir árvore em ordem (InOrder)\n
-               3 - Imprimir árvore em pré-ordem (PreOrder)\n
-               4 - Imprimir árvore em pós-ordem (PostOrder)\n
-               5 - Deletar Valor\n
-               9 - SAIR\n
-               -----------------------\n
-               ---SELECIONE A OPÇÃO DESEJADA---\n");
+        printf("----------MENU---------\n1 - Inserir Valor\n2 - Imprimir árvore em ordem (InOrder)\n3 - Imprimir árvore em pré-ordem (PreOrder)\n4 - Imprimir árvore em pós-ordem (PostOrder)\n5 - Exibir árvore\n9 - SAIR\n-----------------------\n---SELECIONE A OPÇÃO DESEJADA---\n");
         scanf("%d", &option);
 
         switch (option) {
@@ -188,13 +202,11 @@ void menu(Node **root) {
                 postOrder(*root);
                 printf("\n");
                 break;
-            case 5: {
-                int data;
-                printf("Digite o valor a ser deletado: ");
-                scanf("%d", &data);
-                Node *nodeToDelete = *root;  
-                deleteNode(root, nodeToDelete);
-            } break;
+            case 5:
+                printf("Exibindo a árvore:\n");
+                printTree(*root, 0);
+                printf("\n");
+                break;
             case 9:
                 printf("Saindo...\n");
                 break;
